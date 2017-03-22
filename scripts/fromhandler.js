@@ -23,11 +23,8 @@
         console.log('Setting submit handler for form');
         // hide achievement option
         $('.achievementOpt').hide();
-        // check email input
-        //this.emailInput();
 
-        // submit order
-        //console.log("Setting up handler for submit");
+        console.log("Setting up handler for submit");
         //console.log('this', this);
         //console.log('this.$formElement', this.$formElement);
         this.$formElement.on('submit', function (event) {
@@ -56,7 +53,7 @@
     };
 
 
-    FormHandler.prototype.addInputHandler = function(fn) {
+    FormHandler.prototype.addInputHandler = function(fn, fn2) {
         console.log('Setting input handler for form');
         this.$formElement.on('input', '[name="emailAddress"]', function(event) {
             event.preventDefault();
@@ -67,6 +64,32 @@
             } else {
                 message = emailAddress + ' is not an authorized email address!';
                 event.target.setCustomValidity(message);
+            }
+        });
+
+        // This is the validation for decaf.
+        this.$formElement.on('input', '[name="strength"], [name="coffee"]', function(event) {
+            event.preventDefault();
+            var $coffeeSelector = $('[name="coffee"]');
+            var $strengthSelector = $('[name="strength"]');
+            var coffee = $coffeeSelector.val();
+            var strength = $strengthSelector.val();
+            strength = parseInt(strength);
+
+            var message = '';
+            if (fn2(strength, coffee)) {
+                event.target.setCustomValidity('');
+            } else {
+                message = coffee + ' cannot have caffeine rating of ' + strength;
+                if (event.target === $strengthSelector.get(0)) {
+                    //console.log($coffeeSelector.get(0));
+                    $coffeeSelector.get(0).setCustomValidity('');
+                    $strengthSelector.get(0).setCustomValidity(message);
+                } else if (event.target === $coffeeSelector.get(0)) {
+
+                    $coffeeSelector.get(0).setCustomValidity(message);
+                    $strengthSelector.get(0).setCustomValidity('');
+                }
             }
         });
     };

@@ -1,18 +1,15 @@
-(function (window) {
+(function(window) {
     'use strict';
     var App = window.App || {};
 
     var Validation = {
-        isCompanyEmail: function (email) {
+        isCompanyEmail: function(email) {
             return /.+@bignerdranch\.com$/.test(email);
         },
-
-        isDecaf: function (strength, decafString) {
-            if(strength>20 && decafString.includes('decaf')){
-                return false;
-            }else{
-                return true;
-            }
+        isDecaf: function(strength, decafString) {
+            var containsDecaf = /.*decaf.*/.test(decafString);
+            var tooStrong = (strength > 20);
+            return !(containsDecaf && tooStrong);
         }
     };
 
